@@ -81,7 +81,7 @@ All data (cart, orders) is stored in the browser using LocalStorage.
 ![Cart](cart.png)
 
 ### 📦 Orders
-![Orders](orders.png
+![Order](orders.png
 
 ---
 
