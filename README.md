@@ -66,6 +66,25 @@ All data (cart, orders) is stored in the browser using LocalStorage.
 
 ---
 
+## 📸 Screenshots
+
+### 🔐 Login Page
+![Login](login.png)
+
+### 📝 Register Page
+![Register](register.png)
+
+### 🛍️ Dashboard
+![Dashboard](dashboard.png)
+
+### 🛒 Cart
+![Cart](cart.png)
+
+### 📦 Orders
+![Orders](orders.png
+
+---
+
 ## 👨‍💻 Author
 
 B.Satya Hyndavi
