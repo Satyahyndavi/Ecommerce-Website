@@ -1,85 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Payment</title>
+<title>Cash on Delivery</title>
 
 <style>
-body {
-    font-family: Arial;
-    margin: 0;
-    background: url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d') no-repeat center center/cover;
+body{
+  font-family:Arial;
+  background:#f5f5f5;
+  text-align:center;
 }
 
-.overlay {
-    background: rgba(0,0,0,0.6);
-    height: 100vh;
-    padding-top: 40px;
+.box{
+  background:white;
+  width:350px;
+  margin:80px auto;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px gray;
 }
 
-.box {
-    background: white;
-    width: 420px;
-    margin: auto;
-    padding: 20px;
-    border-radius: 10px;
+input, textarea{
+  width:90%;
+  padding:8px;
+  margin:5px;
 }
 
-.header {
-    text-align: center;
-}
-
-.header img {
-    width: 80px;
-}
-
-.option {
-    margin: 15px 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-
-.option label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: bold;
-}
-
-.option img {
-    width: 30px;
-}
-
-.form {
-    margin-top: 10px;
-    padding-left: 25px;
-}
-
-.form input, .form select, textarea {
-    width: 90%;
-    padding: 8px;
-    margin-top: 5px;
-}
-
-.hidden {
-    display: none;
-}
-
-button {
-    background: #ff7e5f;
-    color: white;
-    padding: 12px;
-    border: none;
-    width: 100%;
-    margin-top: 20px;
-    border-radius: 5px;
-    font-size: 16px;
+button{
+  background:#ff7e5f;
+  color:white;
+  padding:10px;
+  border:none;
+  width:100%;
+  margin-top:10px;
+  border-radius:5px;
 }
 </style>
 
 <script>
 if(localStorage.getItem("loggedIn")!=="true"){
-    window.location.href="login.html";
+  window.location.href="login.html";
 }
 </script>
 
@@ -87,121 +46,28 @@ if(localStorage.getItem("loggedIn")!=="true"){
 
 <body>
 
-<div class="overlay">
 <div class="box">
 
-<div class="header">
-<img src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png">
-<h2>Select Payment Method</h2>
-</div>
+<h2>💵 Cash on Delivery</h2>
 
-<!-- COD -->
-<div class="option">
-<label>
-<input type="radio" name="pay" onclick="showForm('cod')">
-💵 Cash on Delivery
-</label>
-</div>
+<p>Pay when your order is delivered</p>
 
-<!-- UPI -->
-<div class="option">
-<label>
-<input type="radio" name="pay" onclick="showForm('upi')">
-<img src="https://cdn-icons-png.flaticon.com/512/825/825454.png">
-UPI Payment
-</label>
-
-<div id="upi" class="form hidden">
-<input type="text" id="upiId" placeholder="Enter UPI ID">
-</div>
-</div>
-
-<!-- CARD -->
-<div class="option">
-<label>
-<input type="radio" name="pay" onclick="showForm('card')">
-<img src="https://cdn-icons-png.flaticon.com/512/633/633611.png">
-Card Payment
-</label>
-
-<div id="card" class="form hidden">
-<input type="text" id="cardNo" placeholder="Card Number">
-<input type="text" id="expiry" placeholder="Expiry">
-<input type="text" id="cvv" placeholder="CVV">
-</div>
-</div>
-
-<!-- NET BANKING -->
-<div class="option">
-<label>
-<input type="radio" name="pay" onclick="showForm('net')">
-<img src="https://cdn-icons-png.flaticon.com/512/2830/2830284.png">
-Net Banking
-</label>
-
-<div id="net" class="form hidden">
-<select id="bank">
-<option value="">Choose Bank</option>
-<option>SBI</option>
-<option>HDFC</option>
-<option>ICICI</option>
-<option>AXIS</option>
-</select>
-<input type="text" id="acc" placeholder="Account Number">
-</div>
-</div>
-
-<!-- ADDRESS -->
 <h3>Delivery Address</h3>
 
-<div class="form">
 <input type="text" id="name" placeholder="Full Name">
 <input type="text" id="phone" placeholder="Phone Number">
-<textarea id="address" placeholder="Full Address"></textarea>
+<textarea id="address" placeholder="Address"></textarea>
 <input type="text" id="city" placeholder="City">
 <input type="text" id="pincode" placeholder="Pincode">
-</div>
 
 <button onclick="placeOrder()">Place Order</button>
 
 </div>
-</div>
 
 <script>
 
-function showForm(type){
-document.getElementById("upi").classList.add("hidden");
-document.getElementById("card").classList.add("hidden");
-document.getElementById("net").classList.add("hidden");
-
-if(type==="upi") document.getElementById("upi").classList.remove("hidden");
-if(type==="card") document.getElementById("card").classList.remove("hidden");
-if(type==="net") document.getElementById("net").classList.remove("hidden");
-
-window.method = type;
-}
-
 function placeOrder(){
 
-if(!window.method){
-alert("Select payment method ❌");
-return;
-}
-
-// VALIDATION
-if(window.method==="upi" && document.getElementById("upiId").value===""){
-alert("Enter UPI ID ❌"); return;
-}
-
-if(window.method==="card" && document.getElementById("cardNo").value===""){
-alert("Enter Card Details ❌"); return;
-}
-
-if(window.method==="net" && document.getElementById("bank").value===""){
-alert("Enter Bank Details ❌"); return;
-}
-
-// ADDRESS
 let name = document.getElementById("name").value;
 let phone = document.getElementById("phone").value;
 let address = document.getElementById("address").value;
@@ -209,22 +75,23 @@ let city = document.getElementById("city").value;
 let pincode = document.getElementById("pincode").value;
 
 if(name==="" || phone==="" || address===""){
-alert("Fill Address ❌"); return;
+alert("Fill Address ❌");
+return;
 }
 
-// CART DATA
+// CART
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 // TOTAL
 let total = cart.reduce((sum,item)=>sum + item.price * item.qty,0);
 
-// ORDER OBJECT
+// ORDER
 let order = {
 items: cart,
 total: total,
 date: new Date().toLocaleString(),
 status: "Processing",
-paymentMethod: window.method,
+paymentMethod: "Cash on Delivery",
 address: {name, phone, address, city, pincode}
 };
 
@@ -236,7 +103,7 @@ localStorage.setItem("orders", JSON.stringify(orders));
 // CLEAR CART
 localStorage.removeItem("cart");
 
-alert("Order Placed ✅");
+alert("Order Placed Successfully ✅");
 
 // REDIRECT
 window.location.href="orders.html";
