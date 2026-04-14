@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* LEFT IMAGE */
+.left {
+    width: 50%;
+}
+
+.left img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* RIGHT FORM */
+.right {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #ff9966, #ff5e62);
+}
+
+.box {
+    background: white;
+    padding: 30px;
+    width: 320px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px gray;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #ff5e62;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#strength {
+    font-weight: bold;
+    margin-top: 5px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="left">
+<img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da">
+</div>
+
+<div class="right">
+<div class="box">
+
+<h2>📝 Register</h2>
+
+<input type="email" id="email" placeholder="Email">
+
+<input type="password" id="password" placeholder="Password" onkeyup="checkStrength()">
+
+<p id="strength"></p>
+
+<button onclick="register()">Register</button>
+
+<br><br>
+<a href="login.html">Already have account?</a>
+
+</div>
+</div>
+
+</div>
+
+<script>
+function checkStrength(){
+let pass = document.getElementById("password").value;
+let msg = document.getElementById("strength");
+
+if(pass.length < 4){
+    msg.innerText = "Weak Password ❌";
+    msg.style.color = "red";
+}
+else if(pass.length < 8){
+    msg.innerText = "Medium Password ⚠️";
+    msg.style.color = "orange";
+}
+else{
+    msg.innerText = "Strong Password ✅";
+    msg.style.color = "green";
+}
+}
+
+function register(){
+let email=document.getElementById("email").value;
+let password=document.getElementById("password").value;
+
+if(email==""||password==""){
+alert("Fill all fields ❌");
+return;
+}
+
+localStorage.setItem("user",JSON.stringify({email,password}));
+
+alert("Registered Successfully ✅");
+window.location.href="login.html";
+}
+</script>
+
+</body>
+</html>

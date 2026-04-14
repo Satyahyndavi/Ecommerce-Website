@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Shop</title>
+
+<style>
+body{font-family:Arial;background:#f5f5f5;margin:0;}
+header{background:#ff7e5f;color:white;padding:15px;text-align:center;}
+nav{background:#333;padding:10px;text-align:center;}
+nav a{color:white;margin:10px;text-decoration:none;}
+.search-box{padding:10px;text-align:center;background:#eee;}
+.search-box input{padding:8px;width:250px;border-radius:5px;border:1px solid gray;}
+.container{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;padding:20px;}
+.card{background:white;padding:15px;width:200px;text-align:center;border-radius:10px;box-shadow:0 0 10px gray;}
+.card img{width:100%;height:140px;border-radius:10px;object-fit:cover;}
+button{background:#ff7e5f;color:white;padding:8px;border:none;border-radius:5px;}
+</style>
+
+<script>
+if(localStorage.getItem("loggedIn")!=="true"){
+alert("Login first ❌");
+window.location.href="login.html";
+}
+</script>
+
+</head>
+
+<body>
+
+<header><h1>🛒 My Shop</h1></header>
+
+<nav>
+<a href="cart.html">Cart (<span id="count">0</span>)</a>
+<a href="#" onclick="logout()">Logout</a>
+</nav>
+
+<!-- 🔍 SEARCH BAR -->
+<div class="search-box">
+<input type="text" id="search" placeholder="Search products..." onkeyup="searchProducts()">
+</div>
+
+<div class="container" id="products"></div>
+
+<script>
+
+// PRODUCTS DATA
+const products=[ 
+["Mobile",10000,"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"],
+["Laptop",50000,"https://th.bing.com/th/id/OIP.7-iJo3X0spIO5iAIbvrT6gHaEl?w=302&h=187&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Headphones",2000,"https://www.bing.com/th/id/OIP.E2KzLGz3OADm2F2ssWuOOwHaE8?w=239&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"],
+["Shoes",3000,"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"],
+["Watch",1500,"https://www.bing.com/th/id/OIP.FifjZl6OXXZ6cQmxRqX4CQHaE8?w=244&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"],
+["Camera",25000,"https://www.bing.com/th/id/OIP.7OEhSLQz7dRToVwbzyXMowHaHa?w=211&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2"],
+["Mouse",1200,"https://tse3.mm.bing.net/th/id/OIP.TbP_bmehslw4RYsarmC2cAHaHa?pid=ImgDet&w=187&h=187&c=7&dpr=1.3&o=7&rm=3"],
+["key board",800,"https://th.bing.com/th/id/OIP._fN5XFsmunKpTBcF-IjizwHaEh?w=300&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Bag",2000,"https://png.pngtree.com/png-clipart/20230927/original/pngtree-bag-school-png-png-image_13141451.png"],
+["Sunglasses",1000,"https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400"],
+["TV",40000,"https://th.bing.com/th/id/OIP.wPqi37Kf3zPIx9eXFdI4-wHaEj?w=306&h=187&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["phone",15000,"https://th.bing.com/th/id/OIP.N7rvbpwkb0xyE-1UL_eKPAHaFE?w=261&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Power Bank",3000,"https://th.bing.com/th/id/OIP.vYgjqqqShzB-uIQ5xdHIxQHaFR?w=275&h=195&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Speaker",10000,"https://th.bing.com/th/id/OIP.By0W8bu-3xYCULv0grgSaQHaHa?w=194&h=194&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Gaming Console",30000,"https://th.bing.com/th/id/OIP.olaRMWF3l86nHUAhSPxdRwHaEK?w=266&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Fan",2000,"https://th.bing.com/th/id/OIP.JNFxFNQEmbuogvzWDHWq0AHaHa?w=194&h=194&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Iron Box",1500,"https://tse1.mm.bing.net/th/id/OIP.bIMxBNWFz4f30Wcf3FYkFQHaHa?pid=ImgDet&w=187&h=187&c=7&dpr=1.3&o=7&rm=3"],
+["grinder mixer",3500,"https://th.bing.com/th/id/OIP.RSp9vc70MQNwCEggeDXziwHaHa?w=203&h=203&c=7&r=0&o=5&dpr=1.3&pid=1.7"],
+["Water Bottle",300,"https://th.bing.com/th?q=1+Liter+Water+Bottle&w=120&h=120&c=1&rs=1&qlt=70&o=7&cb=1&dpr=1.3&pid=InlineBlock&rm=3&mkt=en-IN&cc=IN&setlang=en&adlt=moderate&t=1&mw=247"]
+];
+let container=document.getElementById("products");
+
+// DISPLAY PRODUCTS
+function displayProducts(list){
+container.innerHTML="";
+list.forEach(p=>{
+container.innerHTML+=`
+<div class="card">
+<img src="${p[2]}">
+<h3>${p[0]}</h3>
+<p>₹${p[1]}</p>
+<button onclick="addToCart('${p[0]}',${p[1]},'${p[2]}')">Add</button>
+</div>`;
+});
+}
+
+// SEARCH
+function searchProducts(){
+let input=document.getElementById("search").value.toLowerCase();
+
+let filtered=products.filter(p =>
+p[0].toLowerCase().includes(input)
+);
+
+displayProducts(filtered);
+}
+
+// INITIAL LOAD
+displayProducts(products);
+
+// 🛒 ADD TO CART WITH QUANTITY LOGIC
+function addToCart(name,price,image){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+// check existing
+let existing = cart.find(item => item.name === name);
+
+if(existing){
+  existing.qty += 1;
+} else {
+  cart.push({name,price,image,qty:1});
+}
+
+localStorage.setItem("cart",JSON.stringify(cart));
+updateCount();
+alert(name + " Added ✅");
+}
+
+// 🧮 UPDATE CART COUNT
+function updateCount(){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let totalQty = 0;
+
+cart.forEach(item => {
+  totalQty += item.qty || 1;
+});
+
+document.getElementById("count").innerText = totalQty;
+}
+
+// LOGOUT
+function logout(){
+localStorage.removeItem("loggedIn");
+window.location.href="login.html";
+}
+
+// LOAD COUNT
+updateCount();
+
+</script>
+
+</body>
+</html>

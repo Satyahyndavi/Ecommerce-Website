@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<style>
+body{font-family:Arial;background:#f5f5f5;margin:0;}
+header{background:#333;color:white;padding:15px;text-align:center;}
+.container{padding:20px;}
+input{padding:8px;margin:5px;}
+button{padding:8px;background:#ff7e5f;color:white;border:none;border-radius:5px;}
+.card{background:white;padding:10px;margin:10px;border-radius:8px;}
+</style>
+
+<script>
+// Admin check
+if(localStorage.getItem("role")!=="admin"){
+alert("Access Denied ❌");
+window.location.href="product.html";
+}
+</script>
+
+</head>
+
+<body>
+
+<header>
+<h1>👑 Admin Dashboard</h1>
+<a href="product.html" style="color:white;">⬅ Back to Shop</a>
+</header>
+
+<div class="container">
+
+<h2>Add Product</h2>
+
+<input type="text" id="name" placeholder="Product Name">
+<input type="number" id="price" placeholder="Price">
+<input type="text" id="image" placeholder="Image URL">
+<button onclick="addProduct()">Add Product</button>
+
+<hr>
+
+<h2>All Products</h2>
+<div id="productList"></div>
+
+</div>
+
+<script>
+
+// GET PRODUCTS
+let products = JSON.parse(localStorage.getItem("products")) || [];
+
+// DISPLAY PRODUCTS
+function loadProducts(){
+let list=document.getElementById("productList");
+list.innerHTML="";
+
+products.forEach((p,index)=>{
+list.innerHTML+=`
+<div class="card">
+<p><b>${p.name}</b></p>
+<p>₹${p.price}</p>
+<img src="${p.image}" width="100">
+<br>
+<button onclick="deleteProduct(${index})">Delete</button>
+</div>`;
+});
+}
+
+// ADD PRODUCT
+function addProduct(){
+let name=document.getElementById("name").value;
+let price=document.getElementById("price").value;
+let image=document.getElementById("image").value;
+
+if(name=="" || price=="" || image==""){
+alert("Fill all fields ❗");
+return;
+}
+
+products.push({name,price,image});
+localStorage.setItem("products",JSON.stringify(products));
+
+alert("Product Added ✅");
+loadProducts();
+}
+
+// DELETE PRODUCT
+function deleteProduct(index){
+products.splice(index,1);
+localStorage.setItem("products",JSON.stringify(products));
+loadProducts();
+}
+
+// LOAD ON START
+loadProducts();
+
+</script>
+
+</body>
+</html>
